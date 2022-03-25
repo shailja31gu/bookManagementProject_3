@@ -89,12 +89,11 @@ catch (err) {
 
 const login = async (req, res) => {
     const {email, password} = req.body
-    // if (!email){
-    //     return res.status(400).send({status: false, message: "please enter email"})
-    // }
-    // if (!password){
-    //     return res.status(400).send({status: false, message: "please enter password"})
-    // }
+    
+    if (!Object.keys(req.body).length > 0) {
+        return res.status(400).send({ error: "Please enter some data" })
+    }
+
     if (!isValid(email)) {
         return res.status(400).send({ error: "emailId is required" })
     }
