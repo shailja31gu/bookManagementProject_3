@@ -6,8 +6,7 @@ const router = express.Router()
 
 
 router.post("/login", userContrller.login)
+router.post("/register", userContrller.register)
 
-
-
-module.exports = router
+module.exports = router;
 
