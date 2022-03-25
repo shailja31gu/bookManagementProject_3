@@ -36,9 +36,9 @@ const register = async (req, res) => {
         return res.status(400).send({ error: "Password is required" })
     }
 
-    if (!isValid(address)) {
-        return res.status(400).send({ error: "Address is required" })
-    }
+    // if (!isValid(address)) {
+    //     return res.status(400).send({ error: "Address is required" })
+    // }
 
     let Email = data.email
     let validateEmail = function (Email) {
@@ -54,6 +54,14 @@ const register = async (req, res) => {
     }
     if(!validateMobile(Mobile)){
         return res.status(400).send({error:"Please enter valid mobile"})
+    }
+
+    const Password = password
+    const validatePassword = function(Password){
+        return /^.{8,15}$/.test(Password)
+    }
+    if(!validatePassword(Password)){
+        return res.status(400).send({error:"Password length must be between 8 to 15 characters"})
     }
 
     const emailAlreadyUsed = await userModel.findOne({email})
