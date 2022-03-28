@@ -109,7 +109,6 @@ const getBooks = async (req, res) => {
         if(id.length === 0){
             return res.status(400).send({ error: "enter Book ID" })
         }
-        if (!data) return res.status(400).send({ error: "enter Book id" })
 
         const isPresent = await bookModel.findById({ _id: id })
 
@@ -147,6 +146,39 @@ const getBooks = async (req, res) => {
     }
 }
 
+const updateBook = async (req, res) => {
+
+    try {
+    let data = req.body
+    const id = req.params.bookId
+
+    if (id.length === 0) {
+        res.status(400).send(" Please enter book id ")
+        return
+    }
+
+    if (!Object.keys(data).length > 0) return res.send({msg:"Please enter data for updation"})
+
+    const bookPresent = await bookModel.findById({_id:id})
+
+    if(!bookPresent) return  res.status(404).send({status:false, message:"Book not found"})
+
+    if(data.isDeleted==true){
+        data.deletedAt = moment().format("YYYY-MM-DD")
+    }
+    const updates = { ...data}
+
+    const update = await bookModel.findOneAndUpdate({ _id: id, isDeleted:false }, { $set: updates }, { new: true })
+
+    if(!update) return res.status(400).send({status:false, message:"Book is Deleted"})
+
+    res.status(200).send({status:true, message: update })
+}
+catch(e){
+    return res.status(500).send({ status: false, msg: e.message })
+}
+}
+
 const deleteBook = async(req, res) => {
     try{
         const {bookId} = req.params
@@ -170,6 +202,7 @@ const deleteBook = async(req, res) => {
 module.exports.getBook = getBook;
 module.exports.getBooks = getBooks
 module.exports.createBook = createBook;
+module.exports.updateBook = updateBook;
 module.exports.deleteBook = deleteBook
 
 
