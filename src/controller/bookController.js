@@ -105,36 +105,41 @@ const getBooks = async (req, res) => {
     try {
 
         const data = req.params
-        const id = req.params.bookId
-        if (!id) return res.status(400).send({ error: "enter Book id" })
+        const id = data.bookId
+        if(id.length === 0){
+            return res.status(400).send({ error: "enter Book ID" })
+        }
+        if (!data) return res.status(400).send({ error: "enter Book id" })
 
-        const book = await bookModel.findOne({ _id: id, isDeleted: false })
-
-        if (!book) return res.status(400).send({ error: "Book is deleted" })
-
-        const isPresent = await bookModel.findOne({ data })
+        const isPresent = await bookModel.findById({ _id: id })
 
         if (!isPresent) return res.status(404).send({ error: "Book not found" })
 
+        const book = await bookModel.findById({ _id: id, isDeleted: false }).select({isDeleted: 0})
+
+        if (!book) return res.status(400).send({ error: "Book is deleted" })
+
         const reviews = await reviewModel.find({ bookId: id })
+        
+        const newBook = JSON.parse(JSON.stringify(book))
+        newBook.reviewsData = [...reviews]
+        // const obj = {
+        //     _id: book._id,
+        //     title: book.title,
+        //     excerpt: book.excerpt,
+        //     userId: book.userId,
+        //     category: book.category,
+        //     subcategory: book.subcategory,
+        //     deleted: book.deleted,
+        //     reviews: book.reviews,
+        //     deletedAt: book.deletedAt,
+        //     releasedAt: book.releasedAt,
+        //     createdAt: book.createdAt,
+        //     updatedAt: book.updatedAt,
+        //     reviewsData: reviews
+        // }
 
-        const obj = {
-            _id: book._id,
-            title: book.title,
-            excerpt: book.excerpt,
-            userId: book.userId,
-            category: book.category,
-            subcategory: book.subcategory,
-            deleted: book.deleted,
-            reviews: book.reviews,
-            deletedAt: book.deletedAt,
-            releasedAt: book.releasedAt,
-            createdAt: book.createdAt,
-            updatedAt: book.updatedAt,
-            reviewsData: reviews
-        }
-
-        res.status(200).send({ status: true, message: "Book list", data: obj })
+        res.status(200).send({ status: true, message: "Book list", data: newBook })
     }
     catch (err) {
         // console.log(err)

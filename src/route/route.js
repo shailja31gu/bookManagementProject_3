@@ -15,9 +15,14 @@ router.post('/books',bookController.createBook)
 
 router.get("/books", bookController.getBook)
 
-router.get("/books/:bookId",bookController.getBooks)
+router.get("/bookss/:bookId",bookController.getBooks)
 
 router.delete("/books/:bookId", bookController.deleteBook)
+
+
+router.get("*", (req, res) => {
+    return res.status(404).send({err:'page not found'})
+})
 
 module.exports = router;
 
