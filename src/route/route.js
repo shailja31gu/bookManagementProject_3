@@ -1,16 +1,18 @@
 const express = require("express")
 
-const userContrller = require("../controller/userController")
-const bookContrller = require("../controller/bookController")
+const userController = require("../controller/userController")
+const bookController = require("../controller/bookController")
 
 const router = express.Router()
 
 
-router.post("/register", userContrller.register)
+router.post("/register", userController.register)
 
-router.post("/login", userContrller.login)
+router.post("/login", userController.login)
 
-router.get("/books/:bookId",bookContrller.getBooks)
+router.post('/books',bookController.createBook)
+
+router.get("/books/:bookId",bookController.getBooks)
 
 module.exports = router;
 
