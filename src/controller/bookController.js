@@ -134,11 +134,27 @@ const getBooks = async (req, res) => {
     }
 }
 
+const updateBook = async (req, res) => {
+    let data = req.body
+    const id = req.params.bookId
+
+    if (!id) {
+        res.status(400).send(" Please enter id ")
+        return
+    }
+
+    if (!data) {
+        res.status(400).send("Enter data to update")
+    }
+
+    if (!Object.keys(data).length > 0) return res.send({msg:"Please enter data for updation"})
+}
+
 
 
 
 module.exports.getBooks = getBooks
 module.exports.createBook = createBook;
-// module.exports.updateBook = updateBook;
+module.exports.updateBook = updateBook;
 
 
