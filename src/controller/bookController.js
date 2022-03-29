@@ -41,7 +41,7 @@ let createBook = async function (req, res) {
             return
         }
         if (!isValidObjectId(userId)) {
-            res.status(400).send({ status: false, message: '${userId} is not a valid userr id ' })
+            res.status(400).send({ status: false, message: '${userId} is not a valid user id ' })
             return
         }
         if (!isValid(ISBN)) {
