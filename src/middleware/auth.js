@@ -28,7 +28,7 @@ const authorisation = async function (req, res, next) {
         if (value.userId != userLoggedIn) return res.send({ status: false, msg: "You are not allowed to modify requested book data" })
     }
     catch (err) {
-        res.status(500).send({ msg: err.message })
+        return res.status(500).send({ msg: err.message })
     }
     next()
 }
