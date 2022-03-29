@@ -33,7 +33,7 @@ const authorisation = async function (req, res, next) {
     }
     catch (err) {
         console.log(err)
-        res.status(500).send({ msg: err.message })
+        return res.status(500).send({ msg: err.message })
     }
     next()
 
