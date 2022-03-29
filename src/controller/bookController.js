@@ -27,7 +27,7 @@ let createBook = async function (req, res) {
             res.status(400).send({ status: false, msg: 'please provide book details' })
             return
         }
-        const { title, excerpt, userId, ISBN, category, subcategory } = requestBody
+        const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = requestBody
         if (!isValid(title)) {
             res.status(400).send({ status: false, message: 'book title is required' })
             return
@@ -54,6 +54,11 @@ let createBook = async function (req, res) {
         }
         if (!isValid(subcategory)) {
             res.status(400).send({ status: false, message: 'subcategory is required' })
+            return
+        }
+
+        if (!isValid(releasedAt)) {
+            res.status(400).send({ status: false, message: 'released date is required' })
             return
         }
         let user = await userModel.findById(userId)
@@ -114,7 +119,7 @@ const getBooks = async (req, res) => {
 
         if (!isPresent) return res.status(404).send({ error: "Book not found" })
 
-        const book = await bookModel.findById({ _id: id, isDeleted: false }).select({isDeleted: 0})
+        const book = await bookModel.findOne({ _id: id, isDeleted: false }).select({isDeleted: 0})
 
         if (!book) return res.status(400).send({ error: "Book is deleted" })
 
@@ -152,6 +157,8 @@ const updateBook = async (req, res) => {
     let data = req.body
     const id = req.params.bookId
 
+    const {title, ISBN} = data
+
     if (id.length === 0) {
         res.status(400).send(" Please enter book id ")
         return
@@ -162,6 +169,15 @@ const updateBook = async (req, res) => {
     const bookPresent = await bookModel.findById({_id:id})
 
     if(!bookPresent) return  res.status(404).send({status:false, message:"Book not found"})
+
+    let titleUsed = await bookModel.findOne({title})
+    if (titleUsed) {
+        return res.status(400).send({ status: false, msg: "title must be Unique" })
+    }
+    let IsbnUsed = await bookModel.findOne({ISBN})
+    if (IsbnUsed) {
+        return res.status(400).send({ status: false, msg: "isbn must be unique" })
+    }
 
     if(data.isDeleted==true){
         data.deletedAt = moment().format("YYYY-MM-DD")

@@ -26,7 +26,7 @@ const bookSchema = mongoose.Schema({
         require: "please enter category"
     },
     subcategory: {
-        type: String,
+        type: [String],
         require: "please enter subcategory"
     },
     reviews: {
@@ -43,7 +43,8 @@ const bookSchema = mongoose.Schema({
     },
     releasedAt: {
         type: String,
-        default: " "
+        default: " ",
+        required: true
     } 
 }, {timestamps: true});
 
