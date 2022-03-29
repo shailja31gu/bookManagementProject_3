@@ -5,7 +5,7 @@ const userController = require("../controller/userController")
 const bookController = require("../controller/bookController")
 const reviewController = require("../controller/reviewController")
 
-const mw = require("../middleware/auth")
+const mw = require("../middleware/auth") 
 
 
 
@@ -26,8 +26,11 @@ router.put("/books/:bookId",mw.authentication, mw.authorisation,bookController.u
 router.delete("/books/:bookId",mw.authentication, mw.authorisation, bookController.deleteBook)
 
 // review
+router.post("/books/:bookId/review", reviewController.createReview)
 
 router.put("/books/:bookId/review/:reviewId",reviewController.updateReview)
+
+router.delete("/books/:bookId/review/:reviewId",reviewController.deleteReview)
 
 router.get("*", (req, res) => {
     return res.status(404).send({err:'page not found'})
