@@ -4,6 +4,7 @@ const userController = require("../controller/userController")
 const bookController = require("../controller/bookController")
 const reviewModel = require("../controller/reviewController")
 const mw = require("../middleware/auth")
+const reviewController= require("../controller/reviewController") 
 
 const router = express.Router()
 
@@ -25,6 +26,11 @@ router.delete("/books/:bookId",mw.authentication, mw.authorisation, bookControll
 
 // review
 router.post("/books/:bookId/review", reviewModel.createReview)
+
+router.delete("/books/:bookId/review/:reviewId",reviewController.deleteReview)
+
+
+
 
 router.get("*", (req, res) => {
     return res.status(404).send({err:'page not found'})
