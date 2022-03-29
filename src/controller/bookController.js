@@ -98,6 +98,17 @@ const getBook = async (req, res) => {
         //         return res.status(404).send({status: true, message: `can not filter using (${Object.keys(data)[0]}) query`})
         //     }
         // }
+        function compare( a, b ) {
+            if ( a.title < b.title ){
+              return -1;
+            }
+            if ( a.title > b.title ){
+              return 1;
+            }
+            return 0;
+          }
+          
+        books.sort( compare )
         return res.status(200).send({status: true, message: "Books list", data: books})
     }catch(e){
         return res.status(500).send({status: false, message: e.message})
