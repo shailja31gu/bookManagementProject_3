@@ -32,9 +32,15 @@ router.put("/books/:bookId/review/:reviewId",reviewController.updateReview)
 
 router.delete("/books/:bookId/review/:reviewId",reviewController.deleteReview)
 
+// handle wrong end-point
 router.get("*", (req, res) => {
     return res.status(404).send({err:'page not found'})
 })
+
+router.post("*", (req, res) => {
+    return res.status(404).send({err:'page not found'})
+})
+
 
 module.exports = router;
 
