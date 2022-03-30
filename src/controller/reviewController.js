@@ -97,7 +97,7 @@ const deleteReview = async (req, res) => {
             return res.status(400).send({ status: false, message: "please give valid book id" })
         }
         if (!isValidObjectId(reviewId)){
-            return res.status(400).send({ status: false, message: "please give valid book id" })
+            return res.status(400).send({ status: false, message: "please give valid review id" })
         }
         const book = await bookModel.findById(bookId)
         if (!book) {
