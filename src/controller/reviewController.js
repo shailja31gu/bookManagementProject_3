@@ -68,7 +68,6 @@ const updateReview = async (req, res) => {
                 return res.status(400).send({ status: false, message: "Please enter a rating, between 1 t0 5" })
             }
         }
-        const updates = data
 
         const review = await reviewModel.findById({ _id: rvId })
 
@@ -76,7 +75,7 @@ const updateReview = async (req, res) => {
 
         if (review.isDeleted == true) return res.status(400).send({ status: false, message: "review is deleted" })
 
-        const update = await reviewModel.findOneAndUpdate({ _id: rvId }, { $set: updates }, { new: true })
+        const update = await reviewModel.findOneAndUpdate({ _id: rvId }, { $set: data }, { new: true })
 
         const totalBookReview = await reviewModel.find({bookId: bkId})
 

@@ -181,9 +181,8 @@ const updateBook = async (req, res) => {
     if(data.isDeleted==true){
         data.deletedAt = moment().format("YYYY-MM-DD")
     }
-    const updates = { ...data}
 
-    const update = await bookModel.findOneAndUpdate({ _id: id, isDeleted:false }, { $set: updates }, { new: true })
+    const update = await bookModel.findOneAndUpdate({ _id: id, isDeleted:false }, { $set: data }, { new: true })
 
     if(!update) return res.status(400).send({status:false, message:"Book is Deleted"})
 
