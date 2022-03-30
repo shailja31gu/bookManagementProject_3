@@ -20,13 +20,10 @@ const isValidRequestBody = function (requestBody) {
 }
 
 let createBook = async (req, res) => {
-
-
     try {
         const requestBody = req.body;
         if (!isValidRequestBody(requestBody)) {
-            res.status(400).send({ status: false, message: 'please provide book details' })
-            return
+            return res.status(400).send({ status: false, message: 'please provide book details' })
         }
         // let token = req.headers["x-api-key"];
         // let decodedToken = jwt.verify(token, 'projectthreebook')
@@ -79,14 +76,13 @@ let createBook = async (req, res) => {
             return res.status(400).send({ status: false, message: "isbn already used" })
         }
         const newBook = await bookModel.create(requestBody)
-        res.status(201).send({ status: true, data: newBook })
+        res.status(201).send({ status: true, message:"Success", data: newBook })
     } catch (error) {
         res.status(500).send({ status: false, message: error.message })
     }
 }
 
 const getBook = async (req, res) => {
-    // const filterKeys = ["userId", "category", "subcategory"]
     try{
         const data = req.query
         const filter = {
@@ -97,11 +93,6 @@ const getBook = async (req, res) => {
         if(books.length === 0){
             return res.status(404).send({status: true, message: "no book founds"})
         }
-        // if(books.length == 1){
-        //     if(!filterKeys.includes(Object.keys(data)[0])){
-        //         return res.status(404).send({status: true, message: `can not filter using (${Object.keys(data)[0]}) query`})
-        //     }
-        // }
         function compare( a, b ) {
             if ( a.title < b.title ){
               return -1;
@@ -138,12 +129,12 @@ const getBooks = async (req, res) => {
 
         if (!book) return res.status(400).send({status: false, message: "Book is deleted" })
 
-        const reviews = await reviewModel.find({ bookId: id })
+        const reviews = await reviewModel.find({ bookId: id , isDeleted: false})
         
         const newBook = JSON.parse(JSON.stringify(book))
         newBook.reviewsData = [...reviews]
 
-        return res.status(200).send({ status: true, message: "Book list", data: newBook })
+        return res.status(200).send({ status: true, message: "Success", data: newBook })
     }
     catch (error) {
         return res.status(500).send({ status: false, message: error.message })
@@ -186,7 +177,7 @@ const updateBook = async (req, res) => {
 
     if(!update) return res.status(400).send({status:false, message:"Book is Deleted"})
 
-    return res.status(200).send({status:true, data: update })
+    return res.status(200).send({status:true, message: "Success", data: update })
 }
 catch(error){
     return res.status(500).send({ status: false, message: error.message })
@@ -205,10 +196,10 @@ const deleteBook = async(req, res) => {
             return res.status(404).send({status: false, message: "Book not found" })
         }
         if (book.isDeleted == true){
-            return res.status(404).send({status: false, message: "Book is already deleted" })
+            return res.status(400).send({status: false, message: "Book is already deleted" })
         }
         const delBook = await bookModel.findByIdAndUpdate(bookId, {isDeleted: true, deletedAt: moment().format("YYYY-MM-DD")}, {new: true})
-        return res.status(200).send({status: true, data: delBook})
+        return res.status(200).send({status: true,message: "success", data: delBook})
     }catch(error){
         return res.status(500).send({ status: false, message: error.message })
     }
