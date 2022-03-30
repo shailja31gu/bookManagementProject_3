@@ -129,7 +129,7 @@ const getBooks = async (req, res) => {
 
         if (!book) return res.status(400).send({status: false, message: "Book is deleted" })
 
-        const reviews = await reviewModel.find({ bookId: id , isDeleted: false})
+        const reviews = await reviewModel.find({ bookId: id , isDeleted: false}).select({bookId: 1, reviewedBy: 1,reviewedAt: 1,rating: 1,review: 1})
         
         const newBook = JSON.parse(JSON.stringify(book))
         newBook.reviewsData = [...reviews]
