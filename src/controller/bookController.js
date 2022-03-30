@@ -91,7 +91,7 @@ const getBook = async (req, res) => {
         }
         const books = await bookModel.find(filter).select({"title": 1,"excerpt": 1,"userId": 1,"category":1,"reviews": 1,"releasedAt": 1})
         if(books.length === 0){
-            return res.status(404).send({status: true, message: "no book founds"})
+            return res.status(404).send({status: true, message: "no book found"})
         }
         function compare( a, b ) {
             if ( a.title < b.title ){
