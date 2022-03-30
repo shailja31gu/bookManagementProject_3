@@ -10,7 +10,7 @@ const authentication = async (req, res, next) => {
         }
         let decodedToken = jwt.verify(token, 'projectthreebook')
         if (!decodedToken)
-            return res.status(400).send({ status: false, message: 'token is not valid' })
+            return res.status(401).send({ status: false, message: 'token is not valid' })
     } catch (error) {
         return res.status(500).send({ status: false, message: error.message })
     }
@@ -24,7 +24,7 @@ const authorisation = async (req, res, next) => {
         let userLoggingIn = req.params.bookId
         let userLoggedIn = decodedToken.id
         let value = await bookModel.findById(userLoggingIn)
-        if (value.userId != userLoggedIn) return res.send({ status: false, message: "You are not allowed to modify requested book data" })
+        if (value.userId != userLoggedIn) return res.status(403).send({ status: false, message: "You are not allowed to modify requested book data" })
     }
     catch (error) {
         return res.status(500).send({status: false, message: error.message })
