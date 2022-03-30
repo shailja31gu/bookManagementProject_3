@@ -28,9 +28,9 @@ let createBook = async (req, res) => {
             res.status(400).send({ status: false, message: 'please provide book details' })
             return
         }
-        let token = req.headers["x-api-key"];
-        let decodedToken = jwt.verify(token, 'projectthreebook')
-        requestBody.userId = decodedToken.id
+        // let token = req.headers["x-api-key"];
+        // let decodedToken = jwt.verify(token, 'projectthreebook')
+        // requestBody.userId = decodedToken.id
         const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = requestBody
         if (!isValid(title)) {
             res.status(400).send({ status: false, message: 'book title is required' })
@@ -123,11 +123,11 @@ const getBook = async (req, res) => {
 const getBooks = async (req, res) => {
 
     try {
-
-        const data = req.params
-        const id = data.bookId
-        if(id.length === 0){
-            return res.status(400).send({ status: false, message: "enter Book ID" })
+        const id = req.params.bookId
+        
+        if (!isValidObjectId(id)) {
+            res.status(400).send({ status: false, message: `${id} is not a valid book id ` })
+            return
         }
 
         const isPresent = await bookModel.findById({ _id: id })
@@ -158,8 +158,8 @@ const updateBook = async (req, res) => {
 
     const {title, ISBN} = data
 
-    if (id.length === 0) {
-        res.status(400).send({status: false, message:" Please enter book id "})
+    if (!isValidObjectId(id)) {
+        res.status(400).send({ status: false, message: `${id} is not a valid book id ` })
         return
     }
 
@@ -197,8 +197,9 @@ catch(error){
 const deleteBook = async(req, res) => {
     try{
         const {bookId} = req.params
-        if(!bookId){
-            return res.status(404).send({ status: false, message: "enter book id" })
+        if (!isValidObjectId(bookId)) {
+            res.status(400).send({ status: false, message: `${bookId} is not a valid book id ` })
+            return
         }
         const book = await bookModel.findById(bookId)
         if (!book){

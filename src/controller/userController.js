@@ -103,6 +103,14 @@ const login = async (req, res) => {
             return res.status(400).send({status: false, message: "emailId is required" })
         }
 
+        let Email = email
+        let validateEmail = function (Email) {
+            return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(Email);
+        }
+        if (!validateEmail(Email)) {
+            return res.status(400).send({status: false, message: "Please enter a valid email" })
+        }
+
         if (!isValid(password)) {
             return res.status(400).send({ status: false, message: "Password is required" })
         }

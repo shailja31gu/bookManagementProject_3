@@ -68,9 +68,11 @@ const updateReview = async (req, res) => {
                 return res.status(400).send({ status: false, message: "Please enter a rating, between 1 t0 5" })
             }
         }
-        const updates = { ...data }
+        const updates = data
 
         const review = await reviewModel.findById({ _id: rvId })
+
+        const totalBookReview = await reviewModel.find({bookId: bkId})
 
         if (!review) return res.status(404).send({ status: false, message: "review not found" })
 
@@ -78,8 +80,11 @@ const updateReview = async (req, res) => {
 
         const update = await reviewModel.findOneAndUpdate({ _id: rvId }, { $set: updates }, { new: true })
 
+        const newBook = JSON.parse(JSON.stringify(bookPresent))
+        newBook.reviewsData = [...totalBookReview]
 
-        return res.status(200).send({ status: true, message: update })
+
+        return res.status(200).send({ status: true, message: "Book list", data: newBook })
     }
     catch (error) {
         return res.status(500).send({ status: false, message: error.message })
