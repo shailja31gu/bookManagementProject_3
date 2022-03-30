@@ -117,16 +117,25 @@ const login = async (req, res) => {
 
         const user = await userModel.findOne({ email: email, password: password })
         if (!user) {
-            return res.status(404).send({ status: false, message: "user not found" })
+            return res.status(401).send({ status: false, message: "incorrect credentials" })
         }
 
-        const token = jwt.sign({ id: user._id }, "projectthreebook")
+        // const token = jwt.sign({ id: user._id }, "projectthreebook")
+        const token = jwt.sign({
+            id: user._id.toString(),
+            group: "06",
+            iat: Math.floor(Date.now() / 1000),
+            exp: Math.floor(Date.now() / 1000) + 1 * 60 * 60
+        
+        }, "projectthreebook")
         // res.setheaders("x-auth-token", token)
-        return res.status(200).send({ status: true, token: token })
+        return res.status(200).send({ status: true, message: "success", data: token })
     } catch (error) {
         return res.status(500).send({ status: false, message: error.message })
     }
 }
+
+
 
 module.exports.login = login
 module.exports.register = register

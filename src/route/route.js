@@ -19,7 +19,7 @@ router.post('/books',mw.authentication,bookController.createBook)
 
 router.get("/books",mw.authentication, bookController.getBook)
 
-router.get("/bookss/:bookId",mw.authentication, mw.authorisation, bookController.getBooks)
+router.get("/books/:bookId",mw.authentication, bookController.getBooks)
 
 router.put("/books/:bookId",mw.authentication, mw.authorisation,bookController.updateBook)
 
