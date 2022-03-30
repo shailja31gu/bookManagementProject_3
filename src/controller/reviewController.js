@@ -72,13 +72,13 @@ const updateReview = async (req, res) => {
 
         const review = await reviewModel.findById({ _id: rvId })
 
-        const totalBookReview = await reviewModel.find({bookId: bkId})
-
         if (!review) return res.status(404).send({ status: false, message: "review not found" })
 
         if (review.isDeleted == true) return res.status(400).send({ status: false, message: "review is deleted" })
 
         const update = await reviewModel.findOneAndUpdate({ _id: rvId }, { $set: updates }, { new: true })
+
+        const totalBookReview = await reviewModel.find({bookId: bkId})
 
         const newBook = JSON.parse(JSON.stringify(bookPresent))
         newBook.reviewsData = [...totalBookReview]
