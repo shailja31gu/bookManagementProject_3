@@ -77,7 +77,7 @@ const updateReview = async (req, res) => {
 
         const update = await reviewModel.findOneAndUpdate({ _id: rvId }, { $set: data }, { new: true })
 
-        const totalBookReview = await reviewModel.find({bookId: bkId, isDeleted: false})
+        const totalBookReview = await reviewModel.find({bookId: bkId, isDeleted: false}).select({bookId: 1, reviewedBy: 1,reviewedAt: 1,rating: 1,review: 1})
 
         const newBook = JSON.parse(JSON.stringify(bookPresent))
         newBook.reviewsData = [...totalBookReview]
