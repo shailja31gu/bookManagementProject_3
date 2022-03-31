@@ -16,7 +16,7 @@ const isValidObjectId = function (ObjectId) {
 }
 
 const isValidRequestBody = function (requestBody) {
-    return Object.keys(requestBody).length > 0
+    return (Object.keys(requestBody).length > 0)
 }
 
 let createBook = async (req, res) => {
@@ -193,6 +193,7 @@ catch(error){
     return res.status(500).send({ status: false, message: error.message })
 }
 }
+
 
 const deleteBook = async(req, res) => {
     try{
