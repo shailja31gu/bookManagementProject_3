@@ -23,10 +23,10 @@ const authorisation = async (req, res, next) => {
         let token = req.headers["x-api-key"];
         let decodedToken = jwt.verify(token, "projectthreebook");
         let userLoggingIn = req.params.bookId
-        let userLoggedIn = decodedToken.id)
-        if (value.userId != userLoggedIn) 
-        return res.sen
-        let value = await bookModel.findById(userLoggingInd({ status: false, message: "You are not allowed to modify requested book data" })
+        let userLoggedIn = (decodedToken.id)
+        
+        let value = await bookModel.findById(userLoggingIn)
+        if (value.userId != userLoggedIn) return res.status(403).send({ status: false, message: "You are not allowed to modify requested book data" })
     }
     catch (error) {
         return res.status(500).send({status: false, message: error.message })
