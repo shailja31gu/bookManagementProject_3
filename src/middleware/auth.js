@@ -9,8 +9,9 @@ const authentication = async (req, res, next) => {
             return res.status(401).send({ status: false, message: "important header missing" })
         }
         let decodedToken = jwt.verify(token, 'projectthreebook')
-        if (!decodedToken)
-            return res.status(401).send({ status: false, message: 'token is not valid' })
+        if (!decodedToken) return res.status(401).send({ status: false, message: 'token is not valid' })
+        // console.log(decodedToken.exp)
+        // console.log("now", Math.floor(Date.now() / 1000))
     } catch (error) {
         return res.status(500).send({ status: false, message: error.message })
     }
